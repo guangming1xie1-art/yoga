@@ -1,0 +1,72 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "首页",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/schedule/schedule",
+      "style": {
+        "navigationBarTitleText": "课程日历"
+      }
+    },
+    {
+      "path": "pages/booking/booking",
+      "style": {
+        "navigationBarTitleText": "我的预约"
+      }
+    },
+    {
+      "path": "pages/profile/profile",
+      "style": {
+        "navigationBarTitleText": "个人中心"
+      }
+    }
+  ],
+  "subPackages": [],
+  "preloadRule": {},
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "瑜伽场馆",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#4CAF50",
+    "borderStyle": "black",
+    "backgroundColor": "#F8F8F8",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/icons/home.png",
+        "selectedIconPath": "static/icons/home-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/schedule/schedule",
+        "iconPath": "static/icons/schedule.png",
+        "selectedIconPath": "static/icons/schedule-active.png",
+        "text": "课程"
+      },
+      {
+        "pagePath": "pages/booking/booking",
+        "iconPath": "static/icons/booking.png",
+        "selectedIconPath": "static/icons/booking-active.png",
+        "text": "预约"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "iconPath": "static/icons/profile.png",
+        "selectedIconPath": "static/icons/profile-active.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "easycom": {
+    "uni-ui": "uni-ui/lib/uni-ui/uni-ui.vue"
+  }
+}

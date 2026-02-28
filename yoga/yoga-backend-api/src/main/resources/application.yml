@@ -1,0 +1,47 @@
+server:
+  port: ${SERVER_PORT:8082}
+
+spring:
+  application:
+    name: yoga-backend-api
+
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:yoga_db}?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:123456}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DB:0}
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: com.yoga.common.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+jwt:
+  secret: ${JWT_SECRET:yoga-system-secret-key-must-be-at-least-32-bytes-long-!}
+  access-token-expire: ${JWT_ACCESS_EXPIRE:7200}
+
+knife4j:
+  enable: true
+  openapi:
+    title: 瑜伽系统管理端 API
+    description: yoga-backend-api 接口文档
+    version: 1.0.0
+
+logging:
+  level:
+    com.yoga: DEBUG
