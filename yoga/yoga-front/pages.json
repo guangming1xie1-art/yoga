@@ -3,70 +3,70 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "首页",
-        "enablePullDownRefresh": true
+        "navigationBarTitleText": "首页"
       }
     },
     {
-      "path": "pages/schedule/schedule",
+      "path": "pages/home/index",
       "style": {
-        "navigationBarTitleText": "课程日历"
+        "navigationBarTitleText": "课程"
       }
     },
     {
-      "path": "pages/booking/booking",
+      "path": "pages/session/index",
+      "style": {
+        "navigationBarTitleText": "课程详情"
+      }
+    },
+    {
+      "path": "pages/booking/index",
       "style": {
         "navigationBarTitleText": "我的预约"
       }
     },
     {
-      "path": "pages/profile/profile",
+      "path": "pages/user/index",
       "style": {
         "navigationBarTitleText": "个人中心"
       }
     }
   ],
-  "subPackages": [],
-  "preloadRule": {},
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "瑜伽场馆",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "navigationBarTitleText": "瑜伽预约",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f8f8f8"
   },
   "tabBar": {
-    "color": "#7A7E83",
-    "selectedColor": "#4CAF50",
+    "color": "#999999",
+    "selectedColor": "#00b894",
+    "backgroundColor": "#ffffff",
     "borderStyle": "black",
-    "backgroundColor": "#F8F8F8",
     "list": [
       {
         "pagePath": "pages/index/index",
-        "iconPath": "static/icons/home.png",
-        "selectedIconPath": "static/icons/home-active.png",
-        "text": "首页"
+        "text": "首页",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home-active.png"
       },
       {
-        "pagePath": "pages/schedule/schedule",
-        "iconPath": "static/icons/schedule.png",
-        "selectedIconPath": "static/icons/schedule-active.png",
-        "text": "课程"
+        "pagePath": "pages/home/index",
+        "text": "课程",
+        "iconPath": "static/tabbar/course.png",
+        "selectedIconPath": "static/tabbar/course-active.png"
       },
       {
-        "pagePath": "pages/booking/booking",
-        "iconPath": "static/icons/booking.png",
-        "selectedIconPath": "static/icons/booking-active.png",
-        "text": "预约"
+        "pagePath": "pages/booking/index",
+        "text": "预约",
+        "iconPath": "static/tabbar/booking.png",
+        "selectedIconPath": "static/tabbar/booking-active.png"
       },
       {
-        "pagePath": "pages/profile/profile",
-        "iconPath": "static/icons/profile.png",
-        "selectedIconPath": "static/icons/profile-active.png",
-        "text": "我的"
+        "pagePath": "pages/user/index",
+        "text": "我的",
+        "iconPath": "static/tabbar/user.png",
+        "selectedIconPath": "static/tabbar/user-active.png"
       }
     ]
-  },
-  "easycom": {
-    "uni-ui": "uni-ui/lib/uni-ui/uni-ui.vue"
   }
 }

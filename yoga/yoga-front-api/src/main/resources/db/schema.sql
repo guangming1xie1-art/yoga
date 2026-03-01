@@ -2,7 +2,6 @@
 -- 瑜伽场馆课程预约系统 - 数据库初始化 SQL
 -- 数据库版本：MySQL 8.0+
 -- 字符集：utf8mb4
--- 时区：Asia/Shanghai
 -- ============================================================
 
 CREATE DATABASE IF NOT EXISTS yoga_db DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -41,7 +40,6 @@ CREATE TABLE IF NOT EXISTS `roles` (
   UNIQUE KEY `uk_code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色表';
 
--- 初始化角色数据
 INSERT IGNORE INTO `roles` (`code`, `name`, `description`) VALUES
 ('SYS_ADMIN',   '系统管理员', '拥有所有权限，管理场馆、用户等'),
 ('VENUE_ADMIN',  '场馆管理员', '管理本场馆课程、教练、预约等'),
@@ -49,13 +47,13 @@ INSERT IGNORE INTO `roles` (`code`, `name`, `description`) VALUES
 ('USER',         '普通用户',   '用户端小程序用户');
 
 -- ============================================================
--- 3. 用户角色关联表 user_roles（含 venue_id 作用域）
+-- 3. 用户角色关联表 user_roles
 -- ============================================================
 CREATE TABLE IF NOT EXISTS `user_roles` (
   `id`         BIGINT   NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `user_id`    BIGINT   NOT NULL COMMENT '用户ID',
   `role_id`    BIGINT   NOT NULL COMMENT '角色ID',
-  `venue_id`   BIGINT   DEFAULT NULL COMMENT '作用域场馆ID（SYS_ADMIN时为null）',
+  `venue_id`   BIGINT   DEFAULT NULL COMMENT '作用域场馆ID',
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `idx_user_id` (`user_id`),
@@ -85,14 +83,14 @@ CREATE TABLE IF NOT EXISTS `venues` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='场馆表';
 
 -- ============================================================
--- 5. 教练表 coaches（强绑定 user_id）
+-- 5. 教练表 coaches
 -- ============================================================
 CREATE TABLE IF NOT EXISTS `coaches` (
   `id`          BIGINT       NOT NULL AUTO_INCREMENT COMMENT '教练ID',
   `user_id`     BIGINT       NOT NULL COMMENT '绑定用户ID',
   `venue_id`    BIGINT       NOT NULL COMMENT '所属场馆ID',
   `real_name`   VARCHAR(64)  NOT NULL COMMENT '真实姓名',
-  `specialty`   VARCHAR(256) DEFAULT NULL COMMENT '专长/标签（逗号分隔）',
+  `specialty`   VARCHAR(256) DEFAULT NULL COMMENT '专长/标签',
   `bio`         TEXT         DEFAULT NULL COMMENT '个人简介',
   `avatar`      VARCHAR(512) DEFAULT NULL COMMENT '头像URL',
   `years_exp`   INT          DEFAULT 0   COMMENT '从教年限',
@@ -131,13 +129,13 @@ CREATE TABLE IF NOT EXISTS `course_templates` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='课程模板表';
 
 -- ============================================================
--- 7. 排课规则表 course_schedules（周期排课）
+-- 7. 排课规则表 course_schedules
 -- ============================================================
 CREATE TABLE IF NOT EXISTS `course_schedules` (
   `id`             BIGINT      NOT NULL AUTO_INCREMENT COMMENT '规则ID',
   `template_id`    BIGINT      NOT NULL COMMENT '课程模板ID',
   `coach_id`       BIGINT      NOT NULL COMMENT '教练ID',
-  `weekdays`       VARCHAR(32) NOT NULL COMMENT '上课星期（1-7逗号分隔）',
+  `weekdays`       VARCHAR(32) NOT NULL COMMENT '上课星期',
   `start_time`     TIME        NOT NULL COMMENT '开始时间',
   `end_time`       TIME        NOT NULL COMMENT '结束时间',
   `advance_days`   INT         NOT NULL DEFAULT 7  COMMENT '提前可预约天数',
@@ -153,11 +151,11 @@ CREATE TABLE IF NOT EXISTS `course_schedules` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='排课规则表';
 
 -- ============================================================
--- 8. 课程排期表 course_sessions（实际开课记录）
+-- 8. 课程排期表 course_sessions
 -- ============================================================
 CREATE TABLE IF NOT EXISTS `course_sessions` (
   `id`            BIGINT        NOT NULL AUTO_INCREMENT COMMENT '排期ID',
-  `schedule_id`   BIGINT        DEFAULT NULL COMMENT '排课规则ID（手动排课可为null）',
+  `schedule_id`   BIGINT        DEFAULT NULL COMMENT '排课规则ID',
   `template_id`   BIGINT        NOT NULL COMMENT '课程模板ID',
   `coach_id`      BIGINT        NOT NULL COMMENT '教练ID',
   `venue_id`      BIGINT        NOT NULL COMMENT '场馆ID',
@@ -188,9 +186,9 @@ CREATE TABLE IF NOT EXISTS `bookings` (
   `session_id`    BIGINT      NOT NULL COMMENT '课程排期ID',
   `order_id`      BIGINT      DEFAULT NULL COMMENT '关联订单ID',
   `status`        VARCHAR(16) NOT NULL DEFAULT 'PENDING' COMMENT '状态',
-  `qr_code`       VARCHAR(128) DEFAULT NULL COMMENT '签到二维码内容（唯一）',
+  `qr_code`       VARCHAR(128) DEFAULT NULL COMMENT '签到二维码内容',
   `qr_expire_at`  DATETIME    DEFAULT NULL COMMENT '二维码过期时间',
-  `cancel_by`     VARCHAR(16) DEFAULT NULL COMMENT '取消人：user/admin/system',
+  `cancel_by`     VARCHAR(16) DEFAULT NULL COMMENT '取消人',
   `cancel_reason` VARCHAR(256) DEFAULT NULL COMMENT '取消原因',
   `created_at`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -214,7 +212,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `wx_pay_order_no` VARCHAR(64)   DEFAULT NULL COMMENT '微信支付订单号',
   `amount`          DECIMAL(10,2) NOT NULL COMMENT '实付金额',
   `status`          VARCHAR(16)   NOT NULL DEFAULT 'UNPAID' COMMENT '状态',
-  `refund_type`     VARCHAR(16)   DEFAULT NULL COMMENT '退款方式：ORIGINAL/MANUAL',
+  `refund_type`     VARCHAR(16)   DEFAULT NULL COMMENT '退款方式',
   `refund_amount`   DECIMAL(10,2) DEFAULT NULL COMMENT '退款金额',
   `refund_deadline` DATETIME      DEFAULT NULL COMMENT '退款截止时间',
   `paid_at`         DATETIME      DEFAULT NULL COMMENT '支付时间',
@@ -237,7 +235,7 @@ CREATE TABLE IF NOT EXISTS `checkins` (
   `booking_id`   BIGINT      NOT NULL COMMENT '预约ID',
   `user_id`      BIGINT      NOT NULL COMMENT '用户ID',
   `session_id`   BIGINT      NOT NULL COMMENT '课程排期ID',
-  `method`       VARCHAR(16) NOT NULL DEFAULT 'QR_CODE' COMMENT '签到方式：QR_CODE/MANUAL',
+  `method`       VARCHAR(16) NOT NULL DEFAULT 'QR_CODE' COMMENT '签到方式',
   `checkin_time` DATETIME    NOT NULL COMMENT '签到时间',
   `created_at`   DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
@@ -257,7 +255,7 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   `booking_id` BIGINT   NOT NULL COMMENT '预约ID',
   `rating`     TINYINT  NOT NULL COMMENT '评分：1-5',
   `content`    TEXT     DEFAULT NULL COMMENT '评价内容',
-  `is_visible` TINYINT  DEFAULT 1 COMMENT '是否公开：0-隐藏 1-显示',
+  `is_visible` TINYINT  DEFAULT 1 COMMENT '是否公开',
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted`    TINYINT  DEFAULT 0 COMMENT '逻辑删除',
@@ -273,12 +271,12 @@ CREATE TABLE IF NOT EXISTS `reviews` (
 -- ============================================================
 CREATE TABLE IF NOT EXISTS `notifications` (
   `id`         BIGINT       NOT NULL AUTO_INCREMENT COMMENT '通知ID',
-  `user_id`    BIGINT       DEFAULT NULL COMMENT '接收用户ID（null=广播）',
-  `type`       VARCHAR(32)  NOT NULL COMMENT '类型：SYSTEM/BOOKING/ORDER/REVIEW/BROADCAST',
+  `user_id`    BIGINT       DEFAULT NULL COMMENT '接收用户ID',
+  `type`       VARCHAR(32)  NOT NULL COMMENT '类型',
   `title`      VARCHAR(128) NOT NULL COMMENT '标题',
   `content`    TEXT         NOT NULL COMMENT '内容',
   `related_id` BIGINT       DEFAULT NULL COMMENT '关联业务ID',
-  `is_read`    TINYINT      DEFAULT 0 COMMENT '是否已读：0-未读 1-已读',
+  `is_read`    TINYINT      DEFAULT 0 COMMENT '是否已读',
   `created_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `idx_user_id` (`user_id`),
@@ -292,14 +290,14 @@ CREATE TABLE IF NOT EXISTS `notifications` (
 CREATE TABLE IF NOT EXISTS `operation_logs` (
   `id`              BIGINT       NOT NULL AUTO_INCREMENT COMMENT '日志ID',
   `operator_id`     BIGINT       DEFAULT NULL COMMENT '操作人ID',
-  `operator_name`   VARCHAR(64)  DEFAULT NULL COMMENT '操作人账号/姓名',
+  `operator_name`   VARCHAR(64)  DEFAULT NULL COMMENT '操作人账号',
   `module`          VARCHAR(64)  DEFAULT NULL COMMENT '操作模块',
   `action`          VARCHAR(32)  DEFAULT NULL COMMENT '操作类型',
   `description`     VARCHAR(256) DEFAULT NULL COMMENT '操作描述',
   `ip`              VARCHAR(64)  DEFAULT NULL COMMENT '请求IP',
   `http_method`     VARCHAR(16)  DEFAULT NULL COMMENT 'HTTP方法',
   `request_uri`     VARCHAR(512) DEFAULT NULL COMMENT '请求URI',
-  `request_params`  TEXT         DEFAULT NULL COMMENT '请求参数（JSON）',
+  `request_params`  TEXT         DEFAULT NULL COMMENT '请求参数',
   `response_code`   INT          DEFAULT NULL COMMENT '响应码',
   `cost_ms`         BIGINT       DEFAULT NULL COMMENT '耗时（ms）',
   `created_at`      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

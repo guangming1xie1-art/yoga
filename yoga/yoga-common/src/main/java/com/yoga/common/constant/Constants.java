@@ -29,10 +29,10 @@ public final class Constants {
     public static final String ROLE_USER         = "USER";
 
     // ---- 业务常量 ----
-    public static final int    DEFAULT_ADVANCE_DAYS   = 7;   // 默认提前可预约天数
-    public static final int    DEFAULT_REFUND_HOURS   = 24;  // 默认退款截止（课前小时）
+    public static final int    DEFAULT_ADVANCE_DAYS   = 7;
+    public static final int    DEFAULT_REFUND_HOURS   = 24;
     public static final String QR_CODE_PREFIX         = "yoga:qr:";
-    public static final int    QR_EXPIRE_MINUTES      = 30;  // 签到二维码有效期（分钟）
+    public static final int    QR_EXPIRE_MINUTES      = 30;
 
     // ---- 分页默认值 ----
     public static final int PAGE_DEFAULT_SIZE         = 10;

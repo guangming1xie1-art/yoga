@@ -1,71 +1,60 @@
 import request from './request'
 
 // 认证
-export const authApi = {
-  login: (data) => request.post('/api/backend/auth/login', data),
-  logout: () => request.post('/api/backend/auth/logout'),
-  getUserInfo: () => request.get('/api/backend/auth/user-info')
-}
+export const login = (data) => request.post('/auth/login', data)
+export const logout = () => request.post('/auth/logout')
+export const refreshToken = (token) => request.post('/auth/refresh', { refreshToken: token })
 
-// 场馆
-export const venueApi = {
-  list: (params) => request.get('/api/backend/venue/list', { params }),
-  create: (data) => request.post('/api/backend/venue/create', data),
-  update: (data) => request.put('/api/backend/venue/update', data),
-  delete: (id) => request.delete(`/api/backend/venue/${id}`),
-  detail: (id) => request.get(`/api/backend/venue/${id}`)
-}
+// 场馆管理
+export const getVenueList = (params) => request.get('/venue/list', { params })
+export const getVenueDetail = (id) => request.get(`/venue/${id}`)
+export const createVenue = (data) => request.post('/venue', data)
+export const updateVenue = (id, data) => request.put(`/venue/${id}`, data)
+export const deleteVenue = (id) => request.delete(`/venue/${id}`)
 
-// 教练
-export const coachApi = {
-  list: (params) => request.get('/api/backend/coach/list', { params }),
-  create: (data) => request.post('/api/backend/coach/create', data),
-  update: (data) => request.put('/api/backend/coach/update', data),
-  delete: (id) => request.delete(`/api/backend/coach/${id}`),
-  detail: (id) => request.get(`/api/backend/coach/${id}`)
-}
+// 教练管理
+export const getCoachList = (params) => request.get('/coach/list', { params })
+export const createCoach = (data) => request.post('/coach', data)
+export const updateCoach = (id, data) => request.put(`/coach/${id}`, data)
 
 // 课程模板
-export const courseApi = {
-  list: (params) => request.get('/api/backend/course/list', { params }),
-  create: (data) => request.post('/api/backend/course/create', data),
-  update: (data) => request.put('/api/backend/course/update', data),
-  delete: (id) => request.delete(`/api/backend/course/${id}`),
-  detail: (id) => request.get(`/api/backend/course/${id}`)
-}
+export const getTemplateList = (params) => request.get('/template/list', { params })
+export const createTemplate = (data) => request.post('/template', data)
 
-// 排课
-export const scheduleApi = {
-  list: (params) => request.get('/api/backend/schedule/list', { params }),
-  create: (data) => request.post('/api/backend/schedule/create', data),
-  update: (data) => request.put('/api/backend/schedule/update', data),
-  delete: (id) => request.delete(`/api/backend/schedule/${id}`),
-  generate: (id) => request.post(`/api/backend/schedule/${id}/generate`)
-}
+// 排课管理
+export const getScheduleList = (params) => request.get('/schedule/list', { params })
+export const createSchedule = (data) => request.post('/schedule', data)
 
-// 预约
-export const bookingApi = {
-  list: (params) => request.get('/api/backend/booking/list', { params }),
-  cancel: (id, reason) => request.post(`/api/backend/booking/${id}/cancel`, { reason }),
-  detail: (id) => request.get(`/api/backend/booking/${id}`)
-}
+// 课程排期
+export const getSessionList = (params) => request.get('/session/list', { params })
 
-// 订单
-export const orderApi = {
-  list: (params) => request.get('/api/backend/order/list', { params }),
-  detail: (id) => request.get(`/api/backend/order/${id}`),
-  refund: (id, reason) => request.post(`/api/backend/order/${id}/refund`, { reason })
-}
+// 预约管理
+export const getBookingList = (params) => request.get('/booking/list', { params })
 
-// 用户
-export const userApi = {
-  list: (params) => request.get('/api/backend/user/list', { params }),
-  disable: (id) => request.post(`/api/backend/user/${id}/disable`),
-  enable: (id) => request.post(`/api/backend/user/${id}/enable`)
-}
+// 订单管理
+export const getOrderList = (params) => request.get('/order/list', { params })
 
-// 统计
-export const statisticsApi = {
-  dashboard: () => request.get('/api/backend/statistics/dashboard'),
-  revenue: (params) => request.get('/api/backend/statistics/revenue', { params })
+// 用户管理
+export const getUserList = (params) => request.get('/user/list', { params })
+
+export default {
+  login,
+  logout,
+  refreshToken,
+  getVenueList,
+  getVenueDetail,
+  createVenue,
+  updateVenue,
+  deleteVenue,
+  getCoachList,
+  createCoach,
+  updateCoach,
+  getTemplateList,
+  createTemplate,
+  getScheduleList,
+  createSchedule,
+  getSessionList,
+  getBookingList,
+  getOrderList,
+  getUserList
 }

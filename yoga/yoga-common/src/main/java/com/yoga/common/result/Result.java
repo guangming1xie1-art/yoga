@@ -33,8 +33,6 @@ public class Result<T> implements Serializable {
         this.timestamp = Instant.now();
     }
 
-    // ---- 工厂方法 ----
-
     public static <T> Result<T> ok() {
         return new Result<>(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), null);
     }
@@ -59,12 +57,10 @@ public class Result<T> implements Serializable {
         return new Result<>(ResultCode.INTERNAL_ERROR.getCode(), message, null);
     }
 
-    // ---- Getters ----
+    public int getCode() { return code; }
+    public String getMessage() { return message; }
+    public T getData() { return data; }
+    public Instant getTimestamp() { return timestamp; }
 
-    public int getCode()        { return code; }
-    public String getMessage()  { return message; }
-    public T getData()          { return data; }
-    public Instant getTimestamp(){ return timestamp; }
-
-    public boolean isSuccess()  { return this.code == ResultCode.SUCCESS.getCode(); }
+    public boolean isSuccess() { return this.code == ResultCode.SUCCESS.getCode(); }
 }

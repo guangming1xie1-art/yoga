@@ -27,7 +27,6 @@ public class PageRequest {
     @Schema(description = "排序方向：asc/desc", defaultValue = "desc", example = "desc")
     private String sortDir = "desc";
 
-    /** 转换为 MyBatis-Plus offset */
     public long getOffset() {
         return (long) (page - 1) * size;
     }

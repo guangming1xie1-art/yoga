@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class TokenResponse {
     private String accessToken;
     private String refreshToken;
-    private long expiresIn;      // 秒
+    private long expiresIn;
     private String tokenType = "Bearer";
 }

@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Configuration
 public class MybatisPlusConfig {
 
-    /** 分页插件 */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
@@ -23,7 +22,6 @@ public class MybatisPlusConfig {
         return interceptor;
     }
 
-    /** 自动填充 created_at / updated_at */
     @Bean
     public MetaObjectHandler metaObjectHandler() {
         return new MetaObjectHandler() {

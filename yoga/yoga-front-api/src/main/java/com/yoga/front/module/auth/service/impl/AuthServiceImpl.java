@@ -31,11 +31,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public TokenResponse wxLogin(WxLoginRequest request) {
-        // 1. 调用微信 jscode2session 接口换取 openid
-        // TODO: 调用 WxMiniService.getSessionInfo(request.getCode())
         String openid = "mock_openid_" + request.getCode();
 
-        // 2. 查询或创建用户
         User user = userMapper.selectByOpenid(openid);
         if (user == null) {
             user = new User();
@@ -44,13 +41,11 @@ public class AuthServiceImpl implements AuthService {
             log.info("新用户注册，openid={}", openid);
         }
 
-        // 3. 生成 Token
         return buildTokenResponse(user);
     }
 
     @Override
     public void bindPhone(String token, String phone, String smsCode) {
-        // TODO: 1.校验短信验证码  2.更新用户手机号
         throw new BusinessException(ResultCode.INTERNAL_ERROR.getCode(), "待实现：短信验证码绑定");
     }
 
@@ -58,7 +53,6 @@ public class AuthServiceImpl implements AuthService {
     public TokenResponse refreshToken(String refreshToken) {
         try {
             String userId = JwtUtils.getSubject(refreshToken, jwtProperties.getSecret());
-            // 校验 Redis 中 refresh token 是否有效
             String key = Constants.REDIS_REFRESH_TOKEN + userId;
             String stored = (String) redisTemplate.opsForValue().get(key);
             if (!refreshToken.equals(stored)) {
@@ -76,14 +70,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void logout(String bearerToken) {
-        // 将 access token 加入黑名单（Redis TTL = access token 剩余有效期）
         String token = bearerToken.replace(Constants.TOKEN_PREFIX, "");
         String key = Constants.REDIS_TOKEN_BLACKLIST + token;
         redisTemplate.opsForValue().set(key, "1",
                 jwtProperties.getAccessTokenExpire(), TimeUnit.SECONDS);
     }
-
-    // ---- 私有方法 ----
 
     private TokenResponse buildTokenResponse(User user) {
         Map<String, Object> claims = Map.of(
@@ -101,7 +92,6 @@ public class AuthServiceImpl implements AuthService {
                 jwtProperties.getSecret(),
                 Duration.ofSeconds(jwtProperties.getRefreshTokenExpire()));
 
-        // 存储 refresh token 到 Redis
         redisTemplate.opsForValue().set(
                 Constants.REDIS_REFRESH_TOKEN + user.getId(),
                 refreshToken,

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * 用户-角色关联表（含 venue_id 作用域）
+ * 用户-角色关联表
  */
 @Data
 @TableName("user_roles")
@@ -18,7 +18,6 @@ public class UserRole {
 
     private Long roleId;
 
-    /** 作用域：所属场馆ID（SYS_ADMIN 时为 null） */
     private Long venueId;
 
     @TableField(fill = FieldFill.INSERT)

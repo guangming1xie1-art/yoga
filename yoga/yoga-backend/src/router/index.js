@@ -1,66 +1,83 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import store from '@/store'
-import Cookies from 'js-cookie'
+import BasicLayout from '@/layouts/BasicLayout.vue'
 
 const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('@/views/login/Login.vue'),
-    meta: { title: '登录' }
+    component: () => import('@/views/dashboard/Login.vue'),
+    meta: { requiresAuth: false }
   },
   {
     path: '/',
-    component: () => import('@/layouts/BasicLayout.vue'),
+    component: BasicLayout,
     redirect: '/dashboard',
     children: [
       {
         path: 'dashboard',
         name: 'Dashboard',
-        component: () => import('@/views/dashboard/Dashboard.vue'),
-        meta: { title: '首页', icon: 'HomeFilled' }
+        component: () => import('@/views/dashboard/index.vue'),
+        meta: { title: '仪表盘', icon: 'Odometer' }
       },
       {
         path: 'venue',
         name: 'Venue',
-        component: () => import('@/views/venue/Venue.vue'),
+        component: () => import('@/views/venue/index.vue'),
         meta: { title: '场馆管理', icon: 'OfficeBuilding' }
       },
       {
         path: 'coach',
         name: 'Coach',
-        component: () => import('@/views/coach/Coach.vue'),
+        component: () => import('@/views/coach/index.vue'),
         meta: { title: '教练管理', icon: 'User' }
       },
       {
-        path: 'course',
-        name: 'Course',
-        component: () => import('@/views/course/Course.vue'),
-        meta: { title: '课程管理', icon: 'Reading' }
+        path: 'template',
+        name: 'Template',
+        component: () => import('@/views/template/index.vue'),
+        meta: { title: '课程模板', icon: 'Document' }
+      },
+      {
+        path: 'schedule',
+        name: 'Schedule',
+        component: () => import('@/views/schedule/index.vue'),
+        meta: { title: '排课管理', icon: 'Calendar' }
+      },
+      {
+        path: 'session',
+        name: 'Session',
+        component: () => import('@/views/session/index.vue'),
+        meta: { title: '课程排期', icon: 'Timer' }
       },
       {
         path: 'booking',
         name: 'Booking',
-        component: () => import('@/views/booking/Booking.vue'),
+        component: () => import('@/views/booking/index.vue'),
         meta: { title: '预约管理', icon: 'Tickets' }
       },
       {
         path: 'order',
         name: 'Order',
-        component: () => import('@/views/order/Order.vue'),
+        component: () => import('@/views/order/index.vue'),
         meta: { title: '订单管理', icon: 'Wallet' }
+      },
+      {
+        path: 'review',
+        name: 'Review',
+        component: () => import('@/views/review/index.vue'),
+        meta: { title: '评价管理', icon: 'ChatDotSquare' }
       },
       {
         path: 'user',
         name: 'User',
-        component: () => import('@/views/user/User.vue'),
-        meta: { title: '用户管理', icon: 'UserFilled' }
+        component: () => import('@/views/user/index.vue'),
+        meta: { title: '用户管理', icon: 'Avatar' }
       },
       {
-        path: 'system',
-        name: 'System',
-        component: () => import('@/views/system/System.vue'),
-        meta: { title: '系统设置', icon: 'Setting' }
+        path: 'notification',
+        name: 'Notification',
+        component: () => import('@/views/notification/index.vue'),
+        meta: { title: '通知管理', icon: 'Bell' }
       }
     ]
   }
@@ -71,18 +88,12 @@ const router = createRouter({
   routes
 })
 
-// 路由守卫
 router.beforeEach((to, from, next) => {
-  const token = Cookies.get('accessToken')
-  
-  if (to.path === '/login') {
-    next()
+  const token = localStorage.getItem('token')
+  if (to.meta.requiresAuth !== false && !token) {
+    next('/login')
   } else {
-    if (token) {
-      next()
-    } else {
-      next('/login')
-    }
+    next()
   }
 })
 

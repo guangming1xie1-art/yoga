@@ -32,9 +32,6 @@ public class PageResponse<T> {
     @Schema(description = "总页数", example = "10")
     private long pages;
 
-    /**
-     * 从 MyBatis-Plus IPage 构造
-     */
     public static <T> PageResponse<T> of(IPage<T> iPage) {
         PageResponse<T> resp = new PageResponse<>();
         resp.setList(iPage.getRecords());
@@ -45,9 +42,6 @@ public class PageResponse<T> {
         return resp;
     }
 
-    /**
-     * 手动构造
-     */
     public static <T> PageResponse<T> of(List<T> list, long total, int page, int size) {
         PageResponse<T> resp = new PageResponse<>();
         resp.setList(list);
