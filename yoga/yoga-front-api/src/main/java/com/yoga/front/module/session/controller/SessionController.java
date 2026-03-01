@@ -27,7 +27,6 @@ public class SessionController {
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String date,
             @Valid PageRequest pageRequest) {
-        // TODO
         return Result.ok(sessionService.listSessions(venueId, category, date, pageRequest));
     }
 

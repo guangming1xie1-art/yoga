@@ -13,6 +13,9 @@ spring:
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:123456}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
 
   data:
     redis:
@@ -21,27 +24,39 @@ spring:
       password: ${REDIS_PASSWORD:}
       database: ${REDIS_DB:0}
 
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: Asia/Shanghai
-
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*.xml
   type-aliases-package: com.yoga.common.entity
   configuration:
     map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    db-config:
+      id-type: AUTO
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
 
 jwt:
   secret: ${JWT_SECRET:yoga-system-secret-key-must-be-at-least-32-bytes-long-!}
-  access-token-expire: ${JWT_ACCESS_EXPIRE:7200}
+  access-token-expire: ${JWT_ACCESS_EXPIRE:28800}
+  refresh-token-expire: ${JWT_REFRESH_EXPIRE:604800}
 
 knife4j:
   enable: true
+  setting:
+    language: zh_cn
   openapi:
     title: 瑜伽系统管理端 API
     description: yoga-backend-api 接口文档
     version: 1.0.0
+    group:
+      default:
+        api-rule: package
+        api-rule-resources:
+          - com.yoga.backend
 
 logging:
   level:
-    com.yoga: DEBUG
+    root: INFO
+    com.yoga.backend: DEBUG

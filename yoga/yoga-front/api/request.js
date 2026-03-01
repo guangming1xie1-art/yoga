@@ -1,20 +1,16 @@
-import { useUserStore } from '@/store/user'
-
-const BASE_URL = 'http://localhost:8081'
+const BASE_URL = 'http://localhost:8081/api/front'
 
 const request = (options) => {
   return new Promise((resolve, reject) => {
-    const userStore = useUserStore()
-    const token = userStore.accessToken
-
+    const token = uni.getStorageSync('token')
+    
     uni.request({
       url: BASE_URL + options.url,
       method: options.method || 'GET',
-      data: options.data || {},
+      data: options.data,
       header: {
         'Content-Type': 'application/json',
-        'Authorization': token ? `Bearer ${token}` : '',
-        ...options.header
+        'Authorization': token ? `Bearer ${token}` : ''
       },
       success: (res) => {
         if (res.statusCode === 200) {
@@ -28,9 +24,10 @@ const request = (options) => {
             reject(res.data)
           }
         } else if (res.statusCode === 401) {
-          // Token 过期，清除登录状态
-          userStore.logout()
-          uni.reLaunch({ url: '/pages/index/index' })
+          uni.removeStorageSync('token')
+          uni.navigateTo({
+            url: '/pages/user/index'
+          })
           reject(res)
         } else {
           uni.showToast({
@@ -42,7 +39,7 @@ const request = (options) => {
       },
       fail: (err) => {
         uni.showToast({
-          title: '网络请求失败',
+          title: '网络连接失败',
           icon: 'none'
         })
         reject(err)
@@ -51,9 +48,9 @@ const request = (options) => {
   })
 }
 
-export default {
-  get: (url, data, header) => request({ url, method: 'GET', data, header }),
-  post: (url, data, header) => request({ url, method: 'POST', data, header }),
-  put: (url, data, header) => request({ url, method: 'PUT', data, header }),
-  delete: (url, data, header) => request({ url, method: 'DELETE', data, header })
-}
+export const get = (url, data) => request({ url, method: 'GET', data })
+export const post = (url, data) => request({ url, method: 'POST', data })
+export const put = (url, data) => request({ url, method: 'PUT', data })
+export const del = (url, data) => request({ url, method: 'DELETE', data })
+
+export default request

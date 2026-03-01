@@ -18,7 +18,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @Operation(summary = "微信登录（code换取Token）")
+    @Operation(summary = "微信登录")
     @PostMapping("/wx-login")
     public Result<TokenResponse> wxLogin(@Valid @RequestBody WxLoginRequest request) {
         return Result.ok(authService.wxLogin(request));
@@ -29,7 +29,6 @@ public class AuthController {
     public Result<Void> bindPhone(@RequestHeader("Authorization") String token,
                                   @RequestParam String phone,
                                   @RequestParam String code) {
-        // TODO: 短信验证码校验 + 绑定
         authService.bindPhone(token, phone, code);
         return Result.ok();
     }

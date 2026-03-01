@@ -22,14 +22,14 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
 
     private static final String[] WHITE_LIST = {
-            "/api/front/auth/**",     // 微信登录、绑定手机、刷新Token
-            "/api/front/home/**",     // 首页公开数据
-            "/api/front/session/list",// 课程列表（公开浏览）
+            "/api/front/auth/**",
+            "/api/front/home/**",
+            "/api/front/session/list",
             "/doc.html",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/webjars/**",
-            "/ws/**"                  // WebSocket
+            "/ws/**"
     };
 
     @Bean

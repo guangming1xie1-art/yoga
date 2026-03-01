@@ -17,7 +17,6 @@
   <description>瑜伽系统 - 管理端 Spring Boot API</description>
 
   <dependencies>
-    <!-- 公共库（与 front-api 共享） -->
     <dependency>
       <groupId>com.yoga</groupId>
       <artifactId>yoga-common</artifactId>

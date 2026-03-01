@@ -16,22 +16,12 @@ import java.util.Map;
 
 /**
  * JWT 工具类
- * 统一管理 token 生成、解析、校验
  */
 @Slf4j
 public final class JwtUtils {
 
     private JwtUtils() {}
 
-    /**
-     * 生成 JWT Token
-     *
-     * @param subject    主题（通常是 userId）
-     * @param extraClaims 附加 Claims（如 roles、username）
-     * @param secret     签名密钥（至少32字节）
-     * @param ttl        有效期
-     * @return JWT 字符串
-     */
     public static String generateToken(String subject, Map<String, Object> extraClaims,
                                        String secret, Duration ttl) {
         SecretKey key = buildKey(secret);
@@ -46,9 +36,6 @@ public final class JwtUtils {
                 .compact();
     }
 
-    /**
-     * 解析 Token 返回 Claims（不验证过期，适合刷新场景）
-     */
     public static Claims parseClaimsAllowExpired(String token, String secret) {
         try {
             return parseClaims(token, secret);
@@ -57,9 +44,6 @@ public final class JwtUtils {
         }
     }
 
-    /**
-     * 解析 Token 返回 Claims（严格校验过期）
-     */
     public static Claims parseClaims(String token, String secret) {
         SecretKey key = buildKey(secret);
         return Jwts.parserBuilder()
@@ -69,12 +53,10 @@ public final class JwtUtils {
                 .getBody();
     }
 
-    /** 从 Token 中提取 subject（userId） */
     public static String getSubject(String token, String secret) {
         return parseClaims(token, secret).getSubject();
     }
 
-    /** 校验 token 是否有效 */
     public static boolean isValid(String token, String secret) {
         try {
             parseClaims(token, secret);
@@ -85,7 +67,6 @@ public final class JwtUtils {
         }
     }
 
-    /** 是否过期 */
     public static boolean isExpired(Claims claims) {
         return claims.getExpiration().before(new Date());
     }

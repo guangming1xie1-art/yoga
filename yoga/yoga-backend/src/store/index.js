@@ -1,30 +1,35 @@
 import { defineStore } from 'pinia'
-import Cookies from 'js-cookie'
+import { ref } from 'vue'
 
-export const useUserStore = defineStore('user', {
-  state: () => ({
-    token: Cookies.get('accessToken') || '',
-    userInfo: null
-  }),
+export const useUserStore = defineStore('user', () => {
+  const token = ref(localStorage.getItem('token') || '')
+  const userInfo = ref(JSON.parse(localStorage.getItem('userInfo') || 'null'))
 
-  getters: {
-    isLoggedIn: (state) => !!state.token
-  },
+  const setToken = (newToken) => {
+    token.value = newToken
+    localStorage.setItem('token', newToken)
+  }
 
-  actions: {
-    setToken(token) {
-      this.token = token
-      Cookies.set('accessToken', token, { expires: 7 })
-    },
+  const setUserInfo = (info) => {
+    userInfo.value = info
+    localStorage.setItem('userInfo', JSON.stringify(info))
+  }
 
-    setUserInfo(info) {
-      this.userInfo = info
-    },
+  const logout = () => {
+    token.value = ''
+    userInfo.value = null
+    localStorage.removeItem('token')
+    localStorage.removeItem('userInfo')
+  }
 
-    logout() {
-      this.token = ''
-      this.userInfo = null
-      Cookies.remove('accessToken')
-    }
+  const isLoggedIn = () => !!token.value
+
+  return {
+    token,
+    userInfo,
+    setToken,
+    setUserInfo,
+    logout,
+    isLoggedIn
   }
 })

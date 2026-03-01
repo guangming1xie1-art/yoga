@@ -51,20 +51,17 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 
-# JWT 配置
 jwt:
   secret: ${JWT_SECRET:yoga-system-secret-key-must-be-at-least-32-bytes-long-!}
-  access-token-expire: ${JWT_ACCESS_EXPIRE:7200}    # 秒，默认2小时
-  refresh-token-expire: ${JWT_REFRESH_EXPIRE:604800} # 秒，默认7天
+  access-token-expire: ${JWT_ACCESS_EXPIRE:7200}
+  refresh-token-expire: ${JWT_REFRESH_EXPIRE:604800}
 
-# 微信小程序配置
 wx:
   mini:
     app-id: ${WX_APP_ID:your_app_id}
     app-secret: ${WX_APP_SECRET:your_app_secret}
     login-url: https://api.weixin.qq.com/sns/jscode2session
 
-# Knife4j
 knife4j:
   enable: true
   setting:

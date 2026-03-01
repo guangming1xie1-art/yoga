@@ -1,69 +1,20 @@
 {
-  "name": "yoga-front",
-  "appid": "__UNI__YOGA_APP",
+  "name": "瑜伽预约",
+  "appid": "",
   "description": "瑜伽场馆课程预约小程序",
   "versionName": "1.0.0",
   "versionCode": "100",
   "transformPx": false,
-  "app-plus": {
-    "usingComponents": true,
-    "nvueStyleCompiler": "uni-app",
-    "compilerVersion": 3,
-    "splashscreen": {
-      "alwaysShowBeforeRender": true,
-      "waiting": true,
-      "autoclose": true,
-      "delay": 0
-    },
-    "modules": {},
-    "distribute": {
-      "android": {
-        "permissions": [
-          "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
-          "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
-          "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
-          "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
-          "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
-          "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
-          "<uses-permission android:name=\"android.permission.CAMERA\"/>",
-          "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
-          "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
-          "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
-          "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
-          "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
-          "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
-        ]
-      },
-      "ios": {},
-      "sdkConfigs": {}
-    }
-  },
-  "quickapp": {},
   "mp-weixin": {
-    "appid": "YOUR_WX_MINI_APP_ID",
+    "appid": "",
     "setting": {
       "urlCheck": false,
       "es6": true,
+      "postcss": true,
       "minified": true
     },
     "usingComponents": true,
-    "permission": {
-      "scope.userLocation": {
-        "desc": "用于获取您的位置，以便推荐附近场馆"
-      }
-    },
-    "requiredPrivateInfos": [
-      "getLocation"
-    ]
-  },
-  "mp-alipay": {
-    "usingComponents": true
-  },
-  "mp-baidu": {
-    "usingComponents": true
-  },
-  "mp-toutiao": {
-    "usingComponents": true
+    "lazyCodeLoading": "requiredComponents"
   },
   "uniStatistics": {
     "enable": false

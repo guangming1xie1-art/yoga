@@ -1,4 +1,3 @@
-# 开发环境覆盖配置（无需修改 application.yml）
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/yoga_db?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
