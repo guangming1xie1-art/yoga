@@ -1,0 +1,51 @@
+# 测试环境配置
+spring:
+  application:
+    name: yoga-backend-api-test
+
+  # H2内存数据库配置
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: false
+
+  # JPA配置
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+  # Redis配置 (使用嵌入式或Mock)
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 1
+
+# JWT配置
+jwt:
+  secret: test-secret-key-at-least-32-characters-long-for-jwt-signing
+  access-token-expire: 28800
+  refresh-token-expire: 604800
+
+# MyBatis-Plus配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# 日志配置
+logging:
+  level:
+    com.yoga.backend: DEBUG
+    org.springframework.security: DEBUG
