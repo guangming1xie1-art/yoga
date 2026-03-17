@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yoga.front.module.session.mapper.SessionMapper">
+
+    <resultMap id="SessionVOMap" type="com.yoga.common.dto.session.SessionVO">
+        <id property="id" column="session_id"/>
+        <result property="name" column="session_name"/>
+        <result property="category" column="session_category"/>
+        <result property="description" column="session_description"/>
+        <result property="coverImage" column="session_cover_image"/>
+        <result property="durationMinutes" column="session_duration_minutes"/>
+        <result property="capacity" column="session_capacity"/>
+        <result property="bookedCount" column="session_booked_count"/>
+        <result property="remainingSeats" column="session_remaining_seats"/>
+        <result property="price" column="session_price"/>
+        <result property="difficulty" column="session_difficulty"/>
+        <result property="startTime" column="session_start_time"/>
+        <result property="endTime" column="session_end_time"/>
+        <result property="status" column="session_status"/>
+        <result property="coachId" column="coach_id"/>
+        <result property="coachName" column="coach_name"/>
+        <result property="coachAvatar" column="coach_avatar"/>
+        <result property="venueId" column="venue_id"/>
+        <result property="venueName" column="venue_name"/>
+        <result property="venueAddress" column="venue_address"/>
+    </resultMap>
+
+    <select id="searchSessions" resultMap="SessionVOMap">
+        SELECT
+            cs.id AS session_id,
+            ct.name AS session_name,
+            ct.category AS session_category,
+            ct.description AS session_description,
+            ct.cover_image AS session_cover_image,
+            ct.duration_minutes AS session_duration_minutes,
+            cs.capacity AS session_capacity,
+            cs.booked_count AS session_booked_count,
+            (cs.capacity - cs.booked_count) AS session_remaining_seats,
+            cs.price AS session_price,
+            ct.difficulty AS session_difficulty,
+            cs.start_time AS session_start_time,
+            cs.end_time AS session_end_time,
+            cs.status AS session_status,
+            c.id AS coach_id,
+            c.name AS coach_name,
+            c.avatar AS coach_avatar,
+            v.id AS venue_id,
+            v.name AS venue_name,
+            v.address AS venue_address
+        FROM course_sessions cs
+        LEFT JOIN course_templates ct ON cs.template_id = ct.id
+        LEFT JOIN coaches c ON cs.coach_id = c.id
+        LEFT JOIN venues v ON cs.venue_id = v.id
+        WHERE cs.deleted = 0
+        <if test="keyword != null and keyword != ''">
+            AND (
+                ct.name LIKE CONCAT('%', #{keyword}, '%')
+                OR c.name LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name LIKE CONCAT('%', #{keyword}, '%')
+                OR ct.description LIKE CONCAT('%', #{keyword}, '%')
+                OR ct.category LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+        ORDER BY cs.start_time ASC
+    </select>
+
+</mapper>

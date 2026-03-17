@@ -1,5 +1,7 @@
 package com.yoga.front.module.session.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yoga.common.dto.session.SessionVO;
 import com.yoga.common.exception.BusinessException;
 import com.yoga.common.page.PageRequest;
@@ -10,6 +12,7 @@ import com.yoga.front.module.session.service.SessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service
@@ -31,7 +34,9 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public PageResponse<SessionVO> search(String keyword, PageRequest pageRequest) {
-        throw new UnsupportedOperationException("TODO: search");
+        Page<SessionVO> page = new Page<>(pageRequest.getCurrent(), pageRequest.getSize());
+        IPage<SessionVO> resultPage = sessionMapper.searchSessions(page, keyword);
+        return PageResponse.build(resultPage);
     }
 
     @Override

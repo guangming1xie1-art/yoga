@@ -8,10 +8,13 @@ import com.yoga.common.result.Result;
 import com.yoga.front.module.booking.service.BookingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @Tag(name = "预约管理", description = "预约/取消/列表")
 @RestController
@@ -50,5 +53,11 @@ public class BookingController {
     @GetMapping("/{id}")
     public Result<BookingVO> detail(@PathVariable Long id) {
         return Result.ok(bookingService.getDetail(id));
+    }
+    
+    @Operation(summary = "导出预约记录")
+    @GetMapping("/export")
+    public void exportBookings(@AuthenticationPrincipal String userId, HttpServletResponse response) throws IOException {
+        bookingService.exportBookings(Long.parseLong(userId), response);
     }
 }
