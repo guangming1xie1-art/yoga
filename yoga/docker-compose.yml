@@ -1,0 +1,130 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: yoga-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123456
+      MYSQL_DATABASE: yoga_db
+      MYSQL_USER: yoga
+      MYSQL_PASSWORD: yoga123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./yoga-front-api/src/main/resources/db:/docker-entrypoint-initdb.d
+    networks:
+      - yoga-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: yoga-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - yoga-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  yoga-front-api:
+    build:
+      context: ./yoga-front-api
+      dockerfile: Dockerfile
+    container_name: yoga-front-api
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: yoga_db
+      DB_USERNAME: yoga
+      DB_PASSWORD: yoga123
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ""
+      WX_APP_ID: ${WX_APP_ID}
+      WX_APP_SECRET: ${WX_APP_SECRET}
+      JWT_SECRET: yoga-system-secret-key-must-be-at-least-32-bytes-long-!
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - yoga-network
+    restart: unless-stopped
+
+  yoga-backend-api:
+    build:
+      context: ./yoga-backend-api
+      dockerfile: Dockerfile
+    container_name: yoga-backend-api
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: yoga_db
+      DB_USERNAME: yoga
+      DB_PASSWORD: yoga123
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ""
+      JWT_SECRET: yoga-system-secret-key-must-be-at-least-32-bytes-long-!
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - yoga-network
+    restart: unless-stopped
+
+  yoga-backend:
+    build:
+      context: ./yoga-backend
+      dockerfile: Dockerfile
+    container_name: yoga-backend
+    ports:
+      - "80:80"
+    depends_on:
+      - yoga-backend-api
+    networks:
+      - yoga-network
+    restart: unless-stopped
+
+  yoga-front:
+    build:
+      context: ./yoga-front
+      dockerfile: Dockerfile
+    container_name: yoga-front
+    ports:
+      - "8080:80"
+    depends_on:
+      - yoga-front-api
+    networks:
+      - yoga-network
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
+    driver: local
+  redis-data:
+    driver: local
+
+networks:
+  yoga-network:
+    driver: bridge
